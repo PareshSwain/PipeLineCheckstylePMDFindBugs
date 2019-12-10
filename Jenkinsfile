@@ -53,37 +53,40 @@ stage('Deploy') {
                 echo 'deploying....'
 		withMaven(jdk: 'JDK1.8', maven: 'MAVEN') {
     		// some block
-        	bat "mvn -Dmaven.test.failure.ignore=true deploy"
+        	//bat "mvn -Dmaven.test.failure.ignore=true deploy"
         	}
 		}
 		}
 
 stage('checkstyle') {
             steps {
-                echo 'deploying....'
+                echo 'CheckStyle....'
 		withMaven(jdk: 'JDK1.8', maven: 'MAVEN') {
     		// some block
         	bat "mvn -Dmaven.test.failure.ignore=true checkstyle:checkstyle"
+		step([$class: 'CheckStylePublisher', pattern: '**/target/checkstyle-result.xml'])	
         	}
 		}
 		}
 
 stage('pmd') {
             steps {
-                echo 'deploying....'
+                echo 'PMD....'
 		withMaven(jdk: 'JDK1.8', maven: 'MAVEN') {
     		// some block
         	bat "mvn -Dmaven.test.failure.ignore=true pmd:pmd"
+		step([$class: 'PmdPublisher', pattern: '**/target/pmd.xml'])
         	}
 		}
 		}
 
 stage('findbugs') {
             steps {
-                echo 'deploying....'
+                echo 'FindBugs....'
 		withMaven(jdk: 'JDK1.8', maven: 'MAVEN') {
     		// some block
         	bat "mvn -Dmaven.test.failure.ignore=true findbugs:findbugs"
+		step([$class: 'FindBugsPublisher', pattern: '**/target/findbugs.xml'])
         	}
 		}
 		}
